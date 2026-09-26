@@ -5,18 +5,6 @@ let users = require("./auth_users.js").users;
 const public_users = express.Router();
 const axios = require('axios');
 
-function getBooks() {
-    axios.get('http://localhost:5000/')
-        .then((response) => {
-            console.log(JSON.stringify(response.data, null, 4));
-        })
-        .catch((error) => {
-            console.log("Error fetching books: ", error.message);
-        });
-}
-
-getBooks();
-
 const doesExist = (username) => {
     // Filter the users array for any user with the same username
     let userswithsamename = users.filter((user) => {
@@ -64,10 +52,17 @@ function getBooks() {
 getBooks();
 
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
-  let id = req.params.isbn;
-  res.send(books[id]);
- });
+function getBookByISBN(isbn) {
+    axios.get(`http://localhost:5000/isbn/${isbn}`)
+        .then((response) => {
+            console.log(JSON.stringify(response.data, null, 4));
+        })
+        .catch((error) => {
+            console.log("Error fetching book by ISBN: ", error.message);
+        });
+}
+
+getBookByISBN(1);
   
 // Get book details based on author
 public_users.get('/author/:author', function (req, res) {
