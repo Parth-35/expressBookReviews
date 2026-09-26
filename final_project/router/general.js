@@ -65,23 +65,17 @@ function getBookByISBN(isbn) {
 getBookByISBN(1);
   
 // Get book details based on author
-public_users.get('/author/:author', function (req, res) {
-    const author = req.params.author;
+function getBooksByAuthor(author) {
+    axios.get(`http://localhost:5000/author/${author}`)
+        .then((response) => {
+            console.log(JSON.stringify(response.data, null, 4));
+        })
+        .catch((error) => {
+            console.log("Error fetching books by author: ", error.message);
+        });
+}
 
-    // Obtain all the keys for the 'books' object
-    const bookKeys = Object.keys(books);
-
-    // Iterate through the books and check if the author matches
-    let booksByAuthor = bookKeys
-        .filter((key) => books[key].author === author)
-        .map((key) => books[key]);
-
-    if (booksByAuthor.length > 0) {
-        return res.status(200).json({ booksByAuthor });
-    } else {
-        return res.status(404).json({ message: "No books found for this author" });
-    }
-});
+getBooksByAuthor("Chinua Achebe");
 
 // Get all books based on title
 public_users.get('/title/:title', function (req, res) {
